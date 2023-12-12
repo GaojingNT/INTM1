@@ -9,72 +9,65 @@ class Movies {
   }
 
   addMovie(title, director, year, genre) {
-    // Check if any required details are missing
     if (!title || !director || !year || !genre) {
-      return undefined;
+      return undefined; // Missing required details
     }
 
-    // Check for duplicate movie with the same title and director (case insensitive)
-    const isDuplicate = this.movies.some(
-      movie =>
-        movie.title.toLowerCase() === title.toLowerCase() &&
-        movie.director.toLowerCase() === director.toLowerCase()
+    const lowerCaseTitle = title.toLowerCase();
+    const lowerCaseDirector = director.toLowerCase();
+
+    // Check for duplicate movie
+    const duplicate = this.movies.find(
+      (movie) =>
+        movie.title.toLowerCase() === lowerCaseTitle &&
+        movie.director.toLowerCase() === lowerCaseDirector
     );
 
-    if (isDuplicate) {
-      return undefined;
+    if (duplicate) {
+      return undefined; // Duplicate movie
     }
 
-    // Add the new movie to the array
     const newMovie = {
       title,
       director,
       year,
       genre,
     };
-    this.movies.push(newMovie);
 
+    this.movies.push(newMovie);
     return newMovie;
   }
 
   updateMovie(title, updatedDetails) {
-    // Find the movie by title (case insensitive)
-    const movieIndex = this.movies.findIndex(
-      movie => movie.title.toLowerCase() === title.toLowerCase()
+    const movieToUpdate = this.movies.find(
+      (movie) => movie.title.toLowerCase() === title.toLowerCase()
     );
 
-    // If the movie is not found, return undefined
-    if (movieIndex === -1) {
-      return undefined;
+    if (!movieToUpdate) {
+      return undefined; // Movie not found
     }
 
-    // Update the movie details
-    this.movies[movieIndex] = {
-      ...this.movies[movieIndex],
-      ...updatedDetails,
-    };
+    // Update movie details
+    Object.keys(updatedDetails).forEach((key) => {
+      movieToUpdate[key] = updatedDetails[key];
+    });
 
-    return this.movies[movieIndex];
+    return movieToUpdate;
   }
 
   deleteMovieByTitle(title) {
-    // Find the movie by title (case insensitive)
-    const movieIndex = this.movies.findIndex(
-      movie => movie.title.toLowerCase() === title.toLowerCase()
+    const indexToDelete = this.movies.findIndex(
+      (movie) => movie.title.toLowerCase() === title.toLowerCase()
     );
 
-    // If the movie is found, delete it and return the deleted movie object
-    if (movieIndex !== -1) {
-      const deletedMovie = this.movies.splice(movieIndex, 1)[0];
-      return deletedMovie;
+    if (indexToDelete === -1) {
+      return 'No movie deleted'; // Movie not found
     }
 
-    // If the movie is not found, return undefined
-    return undefined;
+    const deletedMovie = this.movies.splice(indexToDelete, 1)[0];
+    return deletedMovie;
   }
 }
-
-
 
 
 
